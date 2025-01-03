@@ -1,8 +1,8 @@
-import { useContext, createContext, useState } from 'react';
-import { v4 as uuidv4 }  from 'uuid';
-import  useLocalStorage from '../hooks/useLocalStorage'
+import React, { useContext } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import useLocalStorage from '../hooks/useLocalStorage'
 
-const BudgetsContext = createContext();
+const BudgetsContext = React.createContext();
 
 export function useBudgets() {
   return useContext(BudgetsContext);
