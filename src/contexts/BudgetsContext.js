@@ -14,12 +14,11 @@ export const BudgetsProvider = ({ children }) => {
   const [budgets, setBudgets] = useLocalStorage("budgets", [])
   const [expenses, setExpenses] = useLocalStorage("expenses", [])
 
-  function getBudgetExpenses({budgetId}) {
+  function getBudgetExpenses(budgetId) {
     return expenses.filter(expense => expense.budgetId === budgetId)
   }
 
   function addExpense ({ budgetId, amount, description }) {
-  console.log("addExpense called with:", { budgetId, amount, description });
     setExpenses(prevExpenses => {
       return [...prevExpenses, { id: uuidv4(), amount, description, budgetId}]
     })
@@ -36,15 +35,20 @@ export const BudgetsProvider = ({ children }) => {
   }
 
   function deleteBudget ({id}) {
-    // TODO: Deal with expenses
-    // * budget's value should be added to uncategorized section when it is deleted
+    setExpenses(prevExpenses => {
+      return prevExpenses.map(expense => {
+        if (expense.budgetId !== id) return expense
+        return {...expense, budgetId : UNCATEGORIZED_BUDGET_ID}
+      })
+    })
+
 
     setBudgets(prevBudgets => {
       return prevBudgets.filter(budget => budget.id !== id)
     })
   }
 
-  function deleteExpense ({id}) {
+  function deleteExpense({id}) {
     setExpenses(prevExpenses => {
       return prevExpenses.filter(expense => expense.id !== id)
     })
